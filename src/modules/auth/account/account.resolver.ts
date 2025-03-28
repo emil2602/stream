@@ -13,7 +13,6 @@ export class AccountResolver {
   @Authorization()
   @Query(() => UserModel, {name: 'findUserProfile'})
   async getUser(@Authorized('id') id: string) {
-    console.log(id)
     return this.accountService.getUser(id);
   }
 
