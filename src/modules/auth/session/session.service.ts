@@ -12,6 +12,7 @@ import { Request } from "express";
 import {ConfigService} from "@nestjs/config";
 import {getSessionMetaData} from "@/src/shared/utils/session-metadata.util";
 import {RedisService} from "@/src/core/redis/redis.service";
+import {deleteSession, saveSession} from "@/src/shared/utils/session.util";
 
 @Injectable()
 export class SessionService {
@@ -91,37 +92,11 @@ export class SessionService {
 
         const metadata = getSessionMetaData(req, userAgent)
 
-        return new Promise((resolve, reject) => {
-            req.session.createdAt = new Date();
-            req.session.userId = user.id
-            req.session.metadata = metadata
-
-            req.session.save((err) => {
-                if (err) {
-                    return reject(new InternalServerErrorException("Could not create session"));
-                }
-
-                resolve(user)
-            })
-        })
-
-
-
+        return saveSession(req, user, metadata);
     }
+
     async logout(req: Request) {
-        return new Promise((resolve, reject) => {
-            req.session.destroy((err) => {
-                if (err) {
-                    return reject(new InternalServerErrorException("Could not delete session"));
-                }
-            })
-
-            req.res.clearCookie(
-                this.configService.getOrThrow<string>("SESSION_NAME")
-            )
-
-            resolve(true)
-        })
+     return deleteSession(req, this.configService)
     }
 
     async clearSession(req: Request) {

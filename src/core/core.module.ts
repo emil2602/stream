@@ -8,6 +8,7 @@ import {getGraphQLConfig} from "@/src/core/config/graphql.config";
 import { RedisModule } from './redis/redis.module';
 import {AccountModule} from "@/src/modules/auth/account/account.module";
 import {SessionModule} from "@/src/modules/auth/session/session.module";
+import {VerificationModule} from "@/src/modules/auth/verification/verification.module";
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -23,7 +24,8 @@ import {SessionModule} from "@/src/modules/auth/session/session.module";
     PrismaModule,
     RedisModule,
     AccountModule,
-    SessionModule
+    SessionModule,
+    VerificationModule
   ]
 })
 export class CoreModule {}
